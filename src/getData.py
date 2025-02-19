@@ -18,10 +18,6 @@ def getReposFromNexus(base_url):
         list_repos_from_nexus.append(repo['name'])
     return list_repos_from_nexus
 
-def getUsersFromNexus(base_url):
-    print(requests.get(url=base_url).text)
-
-
 #Функция для получения информации из локальных конфигов yaml
 def getReposFromConfigs(path_to_configs_repos):
     configs_files = glob.glob(os.path.join(path_to_configs_repos, "**/*.yaml"), recursive=True)

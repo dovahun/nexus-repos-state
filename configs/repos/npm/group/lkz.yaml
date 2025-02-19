@@ -1,6 +1,6 @@
 id: npm
 type: group
-ris: lkz
+ris: LKZ
 repos:
   - repo: npm-repo-foo-group-lkz
     members:

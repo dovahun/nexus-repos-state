@@ -1,6 +1,6 @@
 id: npm
 type: group
-ris: gdcr
+ris: GDCR
 repos:
   - repo: npm-repo-foo-group-gdcr
     members:
