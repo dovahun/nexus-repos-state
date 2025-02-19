@@ -6,7 +6,7 @@ import sys
 
 from src.getEnv import getEnvs
 from src.manageRepos import CreateRepo
-from src.getData import getReposFromNexus, getUsersFromNexus
+from src.getData import getReposFromNexus
 
 '''
 Определение переменных окружения
@@ -51,6 +51,7 @@ if __name__ == '__main__':
     )
     # getUsersFromNexus(base_url=base_url+"/v1/security/users")
     list_repos_from_nexus = getReposFromNexus(base_url=base_url+"/v1/repositories/")
+    print(list_repos_from_nexus)
     # Запуск по созданию proxy реп
     createProxyGroup = CreateRepo(
         path_to_configs_repos=path_to_configs_repos,

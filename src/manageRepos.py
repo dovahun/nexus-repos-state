@@ -27,7 +27,7 @@ class CreateRepo:
 
     #Метод для генерации url запроса
     def request_url(self, configs ,id, type):
-        nexus_url = self.base_url + id + "/" + type
+        nexus_url = self.base_url + "/v1/repositories/" + id + "/" + type
         return nexus_url
 
     #Метод на удаление групп/репозиториев
