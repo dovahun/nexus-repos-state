@@ -1,0 +1,10 @@
+id: npm
+type: group
+ris: gdcr
+repos:
+  - repo: npm-repo-foo-group-gdcr
+    members:
+      - npm-repo-foo-gdcr
+#  - repo: npm-repo-foo-group1231
+#    members:
+#      - npm-repo-foo

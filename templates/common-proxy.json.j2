@@ -1,0 +1,52 @@
+{
+  "name": "{{ repo_name }}",
+  "online": true,
+  "storage": {
+    "blobStoreName": "{{ blob_storage }}",
+    "strictContentTypeValidation": true
+  },
+  "cleanup": {
+    "policyNames": []
+  },
+  "proxy": {
+    "remoteUrl": "{{ proxy_remote_url }}",
+    "contentMaxAge": 1440,
+    "metadataMaxAge": 1440
+  },
+  "negativeCache": {
+    "enabled": true,
+    "timeToLive": 1440
+  },
+  "httpClient": {
+    "blocked": false,
+    "autoBlock": true,
+    "connection": {
+      "useTrustStore": true
+    },
+    "authentication": {
+      "type": "username",
+      "username": "{{ username }}",
+      "password": "{{ password }}",
+      "ntlmHost": "string",
+      "ntlmDomain": "string",
+      "bearerToken": "string",
+      "preemptive": false
+    }
+  },
+  "routingRule": "string",
+  "replication": {
+    "preemptivePullEnabled": false,
+    "assetPathRegex": "string"
+  },
+{% if id == "maven" %}
+"maven": {
+    "versionPolicy": "MIXED",
+    "layoutPolicy": "STRICT",
+    "contentDisposition": "ATTACHMENT"
+}
+{% elif id == "npm" %}
+"npm": {
+  "removeQuarantined": true
+}
+{% endif %}
+}

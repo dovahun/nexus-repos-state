@@ -1,0 +1,8 @@
+id: maven
+type: proxy
+ris: GDCR
+repos:
+  - repo: maven-proxy-public-gdcr
+    remote_url: https://repo1.maven.org/maven1/
+    username: ci_si_gdcr
+
