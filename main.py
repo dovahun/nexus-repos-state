@@ -5,9 +5,8 @@ import sys
 ########################
 
 from src.getEnv import getEnvs
-from src.manageRepos import CreateRepo
-from src.getData import getReposFromNexus
-
+from src.manageRepos import manageRepo
+from src.getData import getDataFromNexus
 '''
 Определение переменных окружения
 '''
@@ -37,7 +36,6 @@ templates = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 ################
 template_proxy = templates.get_template('common-proxy.json.j2')
 template_group = templates.get_template('common-group.json.j2')
-# template_user =  templates.get_template('common-users.json.j2')
 ################
 
 
@@ -49,11 +47,11 @@ if __name__ == '__main__':
         format='%(asctime)s.%(msecs)03d %(levelname)s %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
-    # getUsersFromNexus(base_url=base_url+"/v1/security/users")
-    list_repos_from_nexus = getReposFromNexus(base_url=base_url+"/v1/repositories/")
-    print(list_repos_from_nexus)
+
+    list_repos_from_nexus = getDataFromNexus(base_url=base_url + "/v1/repositories/",username=username, password=password, key="name")
+
     # Запуск по созданию proxy реп
-    createProxyGroup = CreateRepo(
+    createProxyGroup = manageRepo(
         path_to_configs_repos=path_to_configs_repos,
         base_url = base_url,
         list_repos_from_nexus = list_repos_from_nexus,
@@ -65,10 +63,9 @@ if __name__ == '__main__':
         vault_base_url= vault_base_url,
         vault_token=vault_token,
         vault_path_secret=vault_path_secret
-
     )
     # Запуск по созданию group реп
-    createGroup = CreateRepo(
+    createGroup = manageRepo(
         path_to_configs_repos = path_to_configs_repos,
         base_url = base_url,
         list_repos_from_nexus = list_repos_from_nexus,
@@ -80,7 +77,7 @@ if __name__ == '__main__':
     )
     createProxyGroup.ProxyRepo()
     createGroup.GroupRepo()
-    CreateRepo(
+    manageRepo(
         base_url = base_url,
         list_repos_from_nexus=list_repos_from_nexus,
         username = username,

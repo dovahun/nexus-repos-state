@@ -11,15 +11,17 @@ import hvac
 """
 
 #Функция для получения информации из nexus
-def getReposFromNexus(base_url):
-    repos_from_nexus = requests.get(url=base_url).text
-    list_repos_from_nexus = []
-    for repo in json.loads(repos_from_nexus):
-        list_repos_from_nexus.append(repo['name'])
-    return list_repos_from_nexus
+
+def getDataFromNexus(base_url, username, password, key):
+    data_from_nexus = requests.get(url=base_url,auth=(username, password)).text
+    print(base_url)
+    list_data_from_nexus = []
+    for repo in json.loads(data_from_nexus):
+        list_data_from_nexus.append(repo[str(key)])
+    return list_data_from_nexus
 
 #Функция для получения информации из локальных конфигов yaml
-def getReposFromConfigs(path_to_configs_repos):
+def getDataFromConfigs(path_to_configs_repos):
     configs_files = glob.glob(os.path.join(path_to_configs_repos, "**/*.yaml"), recursive=True)
     configs = []
     for file_path in configs_files:

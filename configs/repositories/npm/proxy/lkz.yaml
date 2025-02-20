@@ -1,3 +1,4 @@
+kind: repositories
 id: npm
 type: proxy
 ris: LKZ

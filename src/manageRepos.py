@@ -4,14 +4,14 @@ from logging import info, error
 
 ########################
 #Импорт локальных функций
-from src.getData import getReposFromConfigs, getSecretFromVault
+from src.getData import getDataFromConfigs, getSecretFromVault
 ########################
 
 '''
 Класс по созданию репозиториев в nexus
 '''
 
-class CreateRepo:
+class manageRepo:
     def __init__(self, base_url = "", path_to_configs_repos="", list_repos_from_nexus = "", template = "",username="", password="", headers="", blob_storage="", vault_base_url="", vault_token="", vault_path_secret=""):
         self.path_to_configs_repos = path_to_configs_repos
         self.base_url = base_url
@@ -34,15 +34,15 @@ class CreateRepo:
     def delete_repos(self):
         local_repos = []
         #Прохождение циклом по конфигам и получение имен репозиториев
-        for repo in getReposFromConfigs(path_to_configs_repos=self.path_to_configs_repos):
-            for i in repo['repos']:
-                local_repos.append(i['repo'])
-
+        for repo in getDataFromConfigs(path_to_configs_repos=self.path_to_configs_repos):
+            if repo["kind"] == "repositories":
+                for i in repo['repos']:
+                    local_repos.append(i['repo'])
         #Сравнение мап с репами из нексуса и локальных конфигов для получения репозитория которого нет в конфиге для последющего удаления
         repos_to_delete = list(set(self.list_repos_from_nexus).difference(local_repos))
-
         for repo in repos_to_delete:
-            delete_repo_url =  self.base_url+repo
+            delete_repo_url = self.base_url+"/v1/repositories/"+repo
+            print(delete_repo_url)
             response = requests.delete(url=delete_repo_url, auth=(self.username, self.password), headers=self.headers)
             if response.status_code == 204:
                 info(f"✅ репозиторий: {repo} удален!")
@@ -71,42 +71,44 @@ class CreateRepo:
 
     #Метод по рендеру информации для создания запроса на создание прокси-репозиториев
     def ProxyRepo(self):
-        configs = getReposFromConfigs(path_to_configs_repos=self.path_to_configs_repos)
+        configs = getDataFromConfigs(path_to_configs_repos=self.path_to_configs_repos)
         for params in configs:
-            if params["type"] == "proxy" :
-                for repo in params["repos"]:
-                    #Рендер конфига для запроса
-                    data = {
-                        "repo_name": repo["repo"],
-                        "proxy_remote_url": repo["remote_url"],
-                        "blob_storage": self.blob_storage,
-                        "username": repo["username"],
-                        "password": getSecretFromVault(vault_base_url=self.vault_base_url,vault_token=self.vault_token,vault_path_secret=self.vault_path_secret,mount_point=params["ris"], secret_user=repo["username"]),
-                        "id": params["id"]
-                    }
+            if params["kind"] == "repositories":
+                if params["type"] == "proxy" :
+                    for repo in params["repos"]:
+                        #Рендер конфига для запроса
+                        data = {
+                            "repo_name": repo["repo"],
+                            "proxy_remote_url": repo["remote_url"],
+                            "blob_storage": self.blob_storage,
+                            "username": repo["username"],
+                            "password": getSecretFromVault(vault_base_url=self.vault_base_url,vault_token=self.vault_token,vault_path_secret=self.vault_path_secret,mount_point=params["ris"], secret_user=repo["username"]),
+                            "id": params["id"]
+                        }
 
-                    self.make_update_repos(
-                        data=data,
-                        repoName=repo["repo"],
-                        url=self.request_url(configs=getReposFromConfigs(path_to_configs_repos=self.path_to_configs_repos), id=params["id"], type=params["type"])
-                    )
+                        self.make_update_repos(
+                            data=data,
+                            repoName=repo["repo"],
+                            url=self.request_url(configs=getDataFromConfigs(path_to_configs_repos=self.path_to_configs_repos), id=params["id"], type=params["type"])
+                        )
     #Метод по рендеру информации для создания запроса на создание групп
     def GroupRepo(self):
-        configs = getReposFromConfigs(path_to_configs_repos=self.path_to_configs_repos)
+        configs = getDataFromConfigs(path_to_configs_repos=self.path_to_configs_repos)
         for params in configs:
-            if params["type"] == "group" :
-                for repo in params["repos"]:
-                    settings = repo["members"]
-                    #Рендер конфига для запроса
-                    data = {
-                        "repo_name": repo["repo"],
-                        "blob_storage": self.blob_storage,
-                        "member_repo": json.dumps(settings)
-                    }
-                    self.make_update_repos(
-                        data=data,
-                        repoName=repo["repo"],
-                        url=self.request_url(
-                            configs=getReposFromConfigs(path_to_configs_repos=self.path_to_configs_repos),
-                            id=params["id"], type=params["type"])
-                    )
+            if params["kind"] == "repositories":
+                if params["type"] == "group" :
+                    for repo in params["repos"]:
+                        settings = repo["members"]
+                        #Рендер конфига для запроса
+                        data = {
+                            "repo_name": repo["repo"],
+                            "blob_storage": self.blob_storage,
+                            "member_repo": json.dumps(settings)
+                        }
+                        self.make_update_repos(
+                            data=data,
+                            repoName=repo["repo"],
+                            url=self.request_url(
+                                configs=getDataFromConfigs(path_to_configs_repos=self.path_to_configs_repos),
+                                id=params["id"], type=params["type"])
+                        )

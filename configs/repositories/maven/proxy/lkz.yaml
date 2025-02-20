@@ -1,3 +1,4 @@
+kind: repositories
 id: maven
 type: proxy
 ris: LKZ

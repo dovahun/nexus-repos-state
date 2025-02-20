@@ -1,3 +1,4 @@
+kind: repositories
 id: maven
 type: group
 ris: GDCR
