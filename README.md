@@ -29,7 +29,7 @@
 kind: "repositories"
 id: "maven"/"npm" # Выбрать один параметр
 type: "group"
-ris: "FOO"/"BAR" # Выбрать один параметр
+ris: "FOO"/"BAR" # Выбрать один параметр, используеся для определения в каком проекте расположен сикрет в VAULT
 repos:
 - repo: reposytory-foo #Пример названия группы
   members:
@@ -44,7 +44,7 @@ repos:
 kind: "repositories"
 id: "maven"/"npm" # Выбрать один параметр
 type: "proxy"
-ris: "FOO"/"BAR" # Выбрать один параметр
+ris: "FOO"/"BAR" # Выбрать один параметр, используеся для определения в каком проекте расположен сикрет в VAULT
 repos:
   - repo: foo-maven-repo
     remote_url: https://maven/repository/maven-repo/ # ссылка на удаленный репозиторий для прокси.
