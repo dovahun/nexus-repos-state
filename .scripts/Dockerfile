@@ -1,17 +1,21 @@
-FROM python:3.10
+FROM python:3.12
 
 ENV TZ=Europe/Moscow
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 ARG req=requirements.txt
 
 WORKDIR app
 
 COPY *.py ./
-COPY src/* ./
+COPY src/* ./src/
 COPY requirements.txt ./
-COPY templates ./
+COPY templates/* ./templates/
 
 RUN pip install -r $req
+
+ENV PYTHONPATH="/app/"
 
 ENTRYPOINT ["python3","main.py"]
 

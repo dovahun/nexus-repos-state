@@ -73,7 +73,7 @@ class manageRepo:
     def ProxyRepo(self):
         configs = getDataFromConfigs(path_to_configs_repos=self.path_to_configs_repos)
         for params in configs:
-            if params["kind"] == "repositories":
+            if params['kind'] == "repositories":
                 if params["type"] == "proxy" :
                     for repo in params["repos"]:
                         #Рендер конфига для запроса

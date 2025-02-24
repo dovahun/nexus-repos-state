@@ -37,10 +37,9 @@ def getDataFromConfigs(path_to_configs_repos):
 #Функция по получению секретов из vault
 def getSecretFromVault(vault_base_url,vault_token,vault_path_secret,mount_point, secret_user):
     client = hvac.Client(url=vault_base_url, token=vault_token)
-    secret = client.secrets.kv.v2.read_secret_version(
+    secret = client.secrets.kv.v1.read_secret(
         mount_point=mount_point,
-        path=vault_path_secret,
-        raise_on_deleted_version=True
+        path=vault_path_secret
     )
-    secret_data = secret["data"]["data"]
+    secret_data = secret["data"]
     return secret_data[secret_user]

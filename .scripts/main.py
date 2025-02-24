@@ -49,6 +49,7 @@ if __name__ == '__main__':
     )
 
     list_repos_from_nexus = getDataFromNexus(base_url=base_url + "/v1/repositories/",username=username, password=password, key="name")
+    print(list_repos_from_nexus)
 
     # Запуск по созданию proxy реп
     createProxyGroup = manageRepo(

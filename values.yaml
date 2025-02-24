@@ -1,0 +1,34 @@
+image:
+  repository: helm-chart-nexus-repos-update
+  tag: 1.0.0
+  pullPolicy: IfNotPresent
+
+jobName: nexus-repos-update
+backoffLimit: 1
+
+securityContext:
+  enable: false
+
+env:
+  public: {}
+  secret: {}
+
+resources: {}
+
+activeDeadlineSeconds:
+
+jobAnnotations: {}
+
+nodeSelector: {}
+affinity: {}
+tolerations: {}
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: http
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: http
