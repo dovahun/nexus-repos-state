@@ -1,0 +1,41 @@
+image:
+  repository: -nexus-repos-update
+  tag: 1.0.0
+  pullPolicy: IfNotPresent
+
+securityContext:
+  enable: false
+  fsGroup: 1001120000
+  runAsNonRoot: false
+  runAsUser: 1001120000
+
+jobName: nexus-repos-update
+backoffLimit: 1
+activeDeadLineSeconds: 360
+
+env:
+  public:
+    NEXUS_BASE_URL: http://127.0.01:8080/service/rest
+    PATH_TO_CONFIGS_REPO: /app/configs/
+    BLOB_STORAGE: nexus-data
+    LOG_LEVEL: INFO
+    VAULT_URL: http://127.0.0.1:8200
+    VAULT_PATH_SECRET: tech_users
+    RUN_IN_K8S: true
+  secret:
+    VAULT_TOKEN: admin
+    NEXUS_USERNAME: admin
+    NEXUS_PASSWORD: admin
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+jobAnnotations:
+  "helm.sh/hook": post-install,post-upgrade
+  "helm.sh/hook-weight": "-5"
+  "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded

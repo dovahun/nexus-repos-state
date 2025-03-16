@@ -1,0 +1,13 @@
+{{- if .Values.env.public }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-env-configmap
+  namespace: {{ .Release.Namespace }}
+  labels:
+    name: {{ .Values.jobName }}
+data:
+{{- range $key, $value :=  .Values.env.public }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}

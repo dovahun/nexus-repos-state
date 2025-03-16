@@ -1,0 +1,5 @@
+name: nexus-repos-update
+apiVersion: v2
+appVersion: 1.0.0
+version: 1.0.1
+description: nexus-repos-update

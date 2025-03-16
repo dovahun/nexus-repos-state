@@ -1,7 +1,0 @@
-id: maven
-type: group
-ris: LKZ
-repos:
-  - repo: maven-public-lkz
-    members:
-      - maven-proxy-public-lkz

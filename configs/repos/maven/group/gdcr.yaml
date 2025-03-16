@@ -1,7 +1,0 @@
-id: maven
-type: group
-ris: GDCR
-repos:
-  - repo: maven-public-gdcr
-    members:
-      - maven-proxy-public-gdcr

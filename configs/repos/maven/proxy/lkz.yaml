@@ -1,8 +1,0 @@
-id: maven
-type: proxy
-ris: LKZ
-repos:
-  - repo: maven-proxy-public-lkz
-    remote_url: https://repo1.maven.org/maven1/
-    username: ci_si_lkz
-

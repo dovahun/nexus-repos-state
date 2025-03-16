@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.jobName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    name: {{ .Values.jobName }}
+{{- with .Values.jobAnnotations }}
+  annotations:
+  {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
+  template:
+    metadata:
+      name: {{ .Values.jobName }}
+      labels:
+        app.kubernetes.io/name: {{ .Values.jobName }}
+    spec:
+      {{- if .Values.securityContext.enable }}
+      securityContext:
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ .Values.securityContext.runAsUser | int64 }}
+        fsGroup: {{ .Values.securityContext.fsGroup | int64 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-env-configmap
+            - secretRef:
+                name: {{ .Release.Name }}-env-secrets
+          resources:{{ toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /app/configs/
+              name: configs
+      volumes:
+        - name: configs
+          configMap:
+            name: {{ .Release.Name }}-configs
+      restartPolicy: Never
+  backoffLimit: {{ .Values.backoffLimit }}

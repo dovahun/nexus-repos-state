@@ -11,15 +11,17 @@ import hvac
 """
 
 #Функция для получения информации из nexus
-def getReposFromNexus(base_url):
-    repos_from_nexus = requests.get(url=base_url).text
-    list_repos_from_nexus = []
-    for repo in json.loads(repos_from_nexus):
-        list_repos_from_nexus.append(repo['name'])
-    return list_repos_from_nexus
+
+def getDataFromNexus(base_url, username, password, key):
+    data_from_nexus = requests.get(url=base_url,auth=(username, password)).text
+    print(base_url)
+    list_data_from_nexus = []
+    for repo in json.loads(data_from_nexus):
+        list_data_from_nexus.append(repo[str(key)])
+    return list_data_from_nexus
 
 #Функция для получения информации из локальных конфигов yaml
-def getReposFromConfigs(path_to_configs_repos):
+def getDataFromConfigs(path_to_configs_repos):
     configs_files = glob.glob(os.path.join(path_to_configs_repos, "**/*.yaml"), recursive=True)
     configs = []
     for file_path in configs_files:
@@ -35,10 +37,9 @@ def getReposFromConfigs(path_to_configs_repos):
 #Функция по получению секретов из vault
 def getSecretFromVault(vault_base_url,vault_token,vault_path_secret,mount_point, secret_user):
     client = hvac.Client(url=vault_base_url, token=vault_token)
-    secret = client.secrets.kv.v2.read_secret_version(
+    secret = client.secrets.kv.v1.read_secret(
         mount_point=mount_point,
-        path=vault_path_secret,
-        raise_on_deleted_version=True
+        path=vault_path_secret
     )
-    secret_data = secret["data"]["data"]
+    secret_data = secret["data"]
     return secret_data[secret_user]
