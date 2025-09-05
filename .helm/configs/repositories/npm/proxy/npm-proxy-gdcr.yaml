@@ -1,14 +1,8 @@
 kind: "repositories"
 id: "npm"
 type: "proxy"
-ris: "GDCR"
+ris: ""
 repos:
-  - repo: gdcr-npm
-    remote_url: https://sfera.inno.local/app/repo-ci-npm/api/repository/gdcr-npm/
-    username: ci_si_gdcr@corp.dev.vtb
-  - repo: gdcr-npm-lib
-    remote_url: https://sfera.inno.local/app/repo-ci-npm/api/repository/gdcr-npm-lib/
-    username: ci_si_gdcr@corp.dev.vtb
-  - repo: dbo-npm
-    remote_url: https://sfera.inno.local/app/repo-ci-npm/api/repository/dbo-npm/
-    username: ci_si_gdcr@corp.dev.vtb
+  - repo: npm
+    remote_url: dest_url
+    username: foo@local
