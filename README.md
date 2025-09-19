@@ -1,7 +1,6 @@
-# Автоматизация по созданию репозиториев для nexus-proxy
+# Nexus state repos
 
-
-# Создан на версии go 1.22
+# go v1.22
 
 ## local build
 
