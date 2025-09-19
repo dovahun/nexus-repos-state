@@ -1,8 +1,0 @@
-kind: "repositories"
-id: "npm"
-type: "proxy"
-ris: ""
-repos:
-  - repo: npm
-    remote_url: dest_url
-    username: foo@local

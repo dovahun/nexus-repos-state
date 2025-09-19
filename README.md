@@ -1,53 +1,43 @@
 # Автоматизация по созданию репозиториев для nexus-proxy
 
 
-## Описание
-Репозиторий для автоматического создания репозиториев в nexus-proxy.
+# Создан на версии go 1.22
 
-Если вам нужно добавить репозиторий прокси в группу то сначало, этот репозиорий нужно создать в конфиге для прокси репозиториев.
+## local build
 
-### Environments
-
-| ENV                                          | Обьяснение                                                                            |
-|:---------------------------------------------|:--------------------------------------------------------------------------------------|
-| NEXUS_BASE_URL                               | Базовый адрес до api nexus                                                            |
-| PATH_TO_CONFIGS_REPO                         | путь до yaml конфигов`                                                                | 
-| BLOB_STORAGE                                 | Указание storage для репозиториев, указывается один на все репы                       |
-| LOG_LEVEL                                    | Уровень логгирования                                                                  |
-| VAULT_URL                                    | Адресс Vault                                                                          |
-| VAULT_PATH_SECRET                            | Путь до технической учетки в vault,один на обе системы                                |
-| RUN_IN_K8S                                   | Если стоит этот енв то будут браться переменные окружения из env, иначе из файла `.env` |
-| VAULT_TOKEN                                  | Токен vault для подключения                                                           |
-| NEXUS_USERNAME                               | УЗ для подключения к Nexus                                                            |
-| NEXUS_PASSWORD                               | Пароль от УЗ к Nexus                                                                  |
-
-### Параметры конфигурационных файлов для создания репозиториев с типом group
-
-#### Пример:
-Пример по созданию групп
 ```
-kind: "repositories"
-id: "maven"/"npm" # Выбрать один параметр
-type: "group"
-ris: "FOO"/"BAR" # Выбрать один параметр, используеся для определения в каком проекте расположен сикрет в VAULT
-repos:
-- repo: reposytory-foo #Пример названия группы
-  members:
-    - foo-maven-repo #Пример названия репозитория
-    - foo-maven-proxy-repo #Пример названия репозитория
+go build -o nexus_repos_state main.go
 ```
 
-### Параметры конфигурационных файлов для создания репозиториев с типом proxy
+## Example structure
+    nexus-repost-state/
+    ├── .bin/
+    │   └── nexus_repos_state
+    ├── src/
+    │   ├── readFiles.go
+    │   └── workWithApi.go
+    │── configs/
+    │   └── repositories/
+    │        │── maven/
+    │        │    │── a_proxy/
+    │        │    │    └── foo-maven-proxy.json
+    │        │    └── z_proxy/
+    │        │        └── foo-group.json
+    │        └── npm/
+    │            └── a_proxy/
+    │                └── foo-npm-proxy.json
+    ├── Dockerfile
+    └── README.md
 
-Пример по созданию прокси репозиториев
-```
-kind: "repositories"
-id: "maven"/"npm" # Выбрать один параметр
-type: "proxy"
-ris: "FOO"/"BAR" # Выбрать один параметр, используеся для определения в каком проекте расположен сикрет в VAULT
-repos:
-  - repo: foo-maven-repo
-    remote_url: https://maven/repository/maven-repo/ # ссылка на удаленный репозиторий для прокси.
-    username: admin@local #Название тех уз которая берется из vault и которая будет использоваться для авторизацию в удаленный репозиторий.
-```
+## FLAGS
+
+| FLAG      |                    description                    |                example                 |
+|:----------|:-------------------------------------------------:|:--------------------------------------:|
+| -url      | Set nexus url with base api path and version /v1/ | http://127.0.0.1:8081/service/rest/v1/ |
+| -username |           Set nexus user for basic auth           |                 admin                  |
+| -password |       Set password from user for basic auth       |                 admin                  |
+| -configs  |       Set path to dir with all json configs       |               ./configs/               |
+| -help     |                       help                        |                   -                    |
+
+## Recomendation: try to name files using alphabet prefix between group and repos. Repos have to create first then groups.
 

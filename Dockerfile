@@ -1,21 +1,17 @@
-FROM python:3.12
-
-ENV TZ=Europe/Moscow
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-ARG req=requirements.txt
+FROM golang:1.22-alpine AS build
 
 WORKDIR app
 
-COPY *.py ./
-COPY src/* ./src/
-COPY requirements.txt ./
-COPY templates/* ./templates/
+COPY . ./
 
-RUN pip install -r $req
+RUN go build -o main main.go
 
-ENV PYTHONPATH="/app/"
+FROM alpine:3.22 AS run
 
-ENTRYPOINT ["python3","main.py"]
+WORKDIR /app
 
+COPY --from=build /go/app/main .
+
+RUN chmod +x main
+
+ENTRYPOINT ["/app/main"]

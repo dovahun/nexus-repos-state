@@ -1,9 +1,0 @@
-kind: "repositories"
-id: "maven"
-type: "group"
-ris: ""
-repos:
-  - repo: maven-group
-    members:
-      - maven
-      - maven-snapshot
