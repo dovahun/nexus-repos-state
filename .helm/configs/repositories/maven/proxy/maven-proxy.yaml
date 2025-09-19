@@ -1,9 +1,0 @@
-kind: "repositories"
-id: "maven"
-type: "proxy"
-ris: ""
-repos:
-  - repo: lkz-maven
-    remote_url: https://maven.repo-ci.sfera/repository/lkz-maven/
-    username: foo@local
-

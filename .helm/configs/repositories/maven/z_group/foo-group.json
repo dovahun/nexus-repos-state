@@ -1,0 +1,16 @@
+{
+  "RequestPath": "repositories/maven/group",
+  "RequestBody": {
+    "name": "foo-maven-group",
+    "online": true,
+    "storage": {
+      "blobStoreName": "default",
+      "strictContentTypeValidation": true
+    },
+    "group": {
+      "memberNames": [
+        "foo-maven-proxy"
+      ]
+    }
+  }
+}
